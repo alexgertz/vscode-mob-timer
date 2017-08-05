@@ -7,7 +7,7 @@ All notable changes to the "mob-timer" extension will be documented in this file
 - Feature: timer duration configurable via commands
 
 
-## 0.0.1
+## 1.0.0
 - Initial release
 - Feature: timer with rotations
 - Feature: timer and rotations show in status bar
