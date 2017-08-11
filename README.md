@@ -20,6 +20,10 @@ Keeping track in status-bar of current rotations and total number of rotations.
 
 ## Release Notes
 
+### 1.1.0
+
+- Update VSCode manifest header color.
+
 ### 1.0.1
 
 - Update VSCode manifest
