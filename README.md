@@ -26,3 +26,9 @@ Keeping track in status-bar of current rotations and total number of rotations.
 - Initial release
 - Feature added: timer with rotations
 - Feature added: timer and rotations show in status bar
+
+
+
+## License
+
+Icon made by [madebyoliver](https://www.flaticon.com/authors/madebyoliver)
