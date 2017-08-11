@@ -4,8 +4,10 @@ All notable changes to the "mob-timer" extension will be documented in this file
 
 ## Next release
 
-- Feature: timer duration configurable via commands
+### 1.0.1
 
+- Update VSCode manifest
+- Add icon with license in readme.
 
 ## 1.0.0
 - Initial release
