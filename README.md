@@ -1,42 +1,31 @@
-# mob-timer README
+# VSCode mob-timer extension
+
+This timer extension is used for [mob programming](mob programming) sessions.  
+It supports setting custom length for each driver rotation and keeping track in time of current and total number of rotations.
 
 
+## Settings Options
 
-## Features
+This extension contributes the following variables to the [settings](https://code.visualstudio.com/docs/customization/userandworkspace):
 
-Start timer for mob-programming sessions.
-
-Keeping track in status-bar of current rotations and total number of rotations.
-
-
-
-## Possible future updates
-
-- Allow setting the rotation length through a command.
-- Make it possible to switch keyboard config.
-- Make it possible to switch keybinds.
+- `mob-timer.minutesPerRotation`: number of minutes per mob programming rotation.
+- `mob-timer.enableStatusBarText`: enable/disable status bar text regarding rotations. Is enabled by default.
 
 
+## Commands:
+
+This extension contributes the following commands to the Command palette.
+
+- `Start Mob Timer`: starts a timer for mob programming rotations.
 
 ## Release Notes
 
-### 1.1.0
+For release-notes see `CHANGELOG.md`
 
-- Update VSCode manifest header color.
+## Contribute
 
-### 1.0.1
-
-- Update VSCode manifest
-- Add icon with license in readme.
-
-### 1.0.0
-
-- Initial release
-- Feature added: timer with rotations
-- Feature added: timer and rotations show in status bar
-
-
+To contribute simply send a pull-request or raise an issue.
 
 ## License
 
-Icon made by [madebyoliver](https://www.flaticon.com/authors/madebyoliver)
+Extension icon made by [madebyoliver](https://www.flaticon.com/authors/madebyoliver)

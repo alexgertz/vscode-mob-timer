@@ -1,8 +1,13 @@
-# Change Log
+# Changelog
 All notable changes to the "mob-timer" extension will be documented in this file.
 
 
-## Next release
+### 1.2.0
+
+- Feature: Set minutes per rotation with setting `mob-timer.minutesPerRotation`
+- Feature: Enable/disable status bar text with setting `mob-timer.enableStatusBarText`
+- Feature: Changed time tracking format to show minutes:seconds instead of just seconds.
+- Refactor: Rewrite MobTimer class to be easier to read.
 
 ### 1.1.0
 

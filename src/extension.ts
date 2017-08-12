@@ -1,103 +1,115 @@
 'use strict';
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+
 import * as vscode from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+
 export function activate(context: vscode.ExtensionContext) {
+    let startMobTimer = vscode.commands.registerCommand('extension.startMobTimer', () => {
 
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "mob-timer" is now active!');
-
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with  registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.sayHello', () => {
-
-        let cycleMinutes = 10;
-        let timer = new MobTimer(cycleMinutes);
-        timer.startTimer();
+        // Get workspace configuration which is setup with defaults in package.json
+        let workSpaceConfiguration = vscode.workspace.getConfiguration('mob-timer'),
+            minutesPerRotation = workSpaceConfiguration.minutesPerRotation,
+            enableStatusBarText = workSpaceConfiguration.enableStatusBarText;
+        
+        new MobTimer(minutesPerRotation, enableStatusBarText).start();
     });
 
-    context.subscriptions.push(disposable);
+    
+    context.subscriptions.push(startMobTimer);
 }
+export function deactivate() {}
 
-// this method is called when your extension is deactivated
-export function deactivate() {
-}
 
 class MobTimer {
 
-    cycleMinutes: number;
+    minutesPerRotation: number;
+    enableStatusBarText: boolean;
 
-    cyclesElapsed: number = 0;
-    secondsElapsed: number = 0;
-
+    rotations: number = 0;
     paused: boolean = false;
+    secondsElapsed: number = 0;
 
     private _statusBarItem: vscode.StatusBarItem;
 
-    constructor(cycleMinutes: number) {
-        this.cycleMinutes = cycleMinutes;
+    constructor(minutesPerRotation: number, enableStatusBarText: boolean) {
+        this.minutesPerRotation = minutesPerRotation;
+        this.enableStatusBarText = enableStatusBarText;
     }
 
+    public start() {
 
-    public startTimer() {
+        // Enable status bar for showing rotations and time
+        if (this.enableStatusBarText) {
+            this.showStatusBar();
+        }
 
+        vscode.window.showInformationMessage(`Starting with rotations every ${this.minutesPerRotation} minutes, good luck!`);
+        
+        // Update timer
+        setInterval(this.update, 1000, this);
+    }
+
+    private showStatusBar() {
         if (!this._statusBarItem) {
             this._statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right);
         }
-
-        vscode.window.showInformationMessage(`Starting with rotations every ${this.cycleMinutes} minutes, good luck!`);
-        
-        // Show status bar for cycle and elapsed time
         this._statusBarItem.show();
-        setInterval(this.updateTimer, 1000, this);
-        
     }
 
-    addCycle() {
-        this.cyclesElapsed += 1;
+    private addRotation() {
+        this.rotations += 1;
     }
 
-    pause() {
+    private pause() {
         this.paused = true;
     }
 
-    rotate() {
-        this.addCycle();
+    private rotate() {
+        this.addRotation();
         this.pause();
-        this.rotateTimerModal();   
+        this.rotateModal();   
     }
 
-    restartTimer() {
-        console.log("Restarting timer.");        
+    private restart() {  
         this.secondsElapsed = 0;
         this.paused = false;
     }
 
-    updateTimer(_this: MobTimer) {
+    private timeFormat(seconds) {
+        let minutes = Math.floor(seconds/60);
+        seconds = seconds - (minutes * 60);
+        
+        return `${minutes}:${seconds}`;
+    }
+
+    private updateStatusBar() {
+        let timeElapsed = this.timeFormat(this.secondsElapsed);
+        this._statusBarItem.text = `Rotations: ${this.rotations}, Time elapsed: ${timeElapsed}`;
+    }
+
+    private update(_this: MobTimer) {
 
         if (_this.paused) {
             return;
         }
 
-        _this._statusBarItem.text = `Rotations done: ${_this.cyclesElapsed}, Current rotation: ${_this.secondsElapsed}`;
+        if (_this.enableStatusBarText) {
+            _this.updateStatusBar();
+        }
 
-        if (_this.secondsElapsed == _this.cycleMinutes * 60) {
+        if (_this.secondsElapsed == _this.minutesPerRotation * 60) {
             _this.rotate();
         } else {
             _this.secondsElapsed += 1;
         }
     }
 
-    rotateTimerModal() {
+    private rotateModal() {
         // When the time is up we inform of rotation
-        let msgOptions = {'modal': true};
-        let actions = ['Restart timer'];
-        vscode.window.showWarningMessage('Time to change driver.', msgOptions, ...actions).then(action => this.restartTimer());
+        let msgOptions = {'modal': true},
+            actions = ['Restart timer'];
+
+        vscode.window.showWarningMessage('Time to change driver.', msgOptions, ...actions).then(action => this.restart());
     }
 
 }
