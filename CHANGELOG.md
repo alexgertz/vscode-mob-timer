@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to the "mob-timer" extension will be documented in this file.
 
+### 1.3.0
+
+- Layout: Status bar time text is now padded for smoother time updates.
+
 
 ### 1.2.0
 

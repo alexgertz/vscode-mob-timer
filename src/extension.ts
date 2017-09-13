@@ -78,8 +78,16 @@ class MobTimer {
     private timeFormat(seconds) {
         let minutes = Math.floor(seconds/60);
         seconds = seconds - (minutes * 60);
+
+        let secondsFormatted = this.timePad(seconds);
+        let minutesFormatted = this.timePad(minutes);
+
         
-        return `${minutes}:${seconds}`;
+        return `${minutesFormatted}:${secondsFormatted}`;
+    }
+
+    private timePad(n: number) {
+        return ('0' + String(n)).slice(-2);
     }
 
     private updateStatusBar() {

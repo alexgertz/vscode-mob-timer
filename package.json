@@ -2,7 +2,7 @@
     "name": "mob-timer",
     "displayName": "mob-timer",
     "description": "This is an extension to make it easier to time your rotations while doing mob programming.",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "publisher": "sonkan",
     "keywords": [
         "timer",
