@@ -17,6 +17,9 @@ This extension contributes the following variables to the [settings](https://cod
 This extension contributes the following commands to the Command palette.
 
 - `Start Mob Timer`: starts a timer for mob programming rotations.
+- `Stop Mob Timer`: stops a running timer.
+- `Resume Mob Timer`: resumes a stopped timer.
+- `Reset Mob Timer`: resets a timer, running or not.
 
 ## Release Notes
 

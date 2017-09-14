@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to the "mob-timer" extension will be documented in this file.
 
+### 1.4.0
+
+- Feature: Run command `Stop Mob Timer` to stop the timer.
+- Feature: Give the option to not start the timer on rotation.
+- Feature: Give the option for stopped rotations to be resumed with `Resume Mob Timer`.
+- Feature: Give the option to reset the timer with the command `Reset Mob Timer`.
+- Bugfix: Mob Timers are no longer stackable.
+
+
 ### 1.3.0
 
 - Layout: Status bar time text is now padded for smoother time updates.
