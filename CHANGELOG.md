@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to the "mob-timer" extension will be documented in this file.
 
+### 1.5.1
+
+- Update readme to align with changes introduced in 1.5.0.
+
 ### 1.5.0
 
 - Bugfix: Fix a bug introduced in 1.4.0 which could make the timer go double speed.
