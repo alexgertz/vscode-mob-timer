@@ -2,7 +2,7 @@
     "name": "mob-timer",
     "displayName": "mob-timer",
     "description": "This is an extension to make it easier to time your rotations while doing mob programming.",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "publisher": "sonkan",
     "keywords": [
         "timer",
@@ -42,10 +42,6 @@
                 "title": "Stop Mob Timer"
             },
             {
-                "command": "extension.resumeMobTimer",
-                "title": "Resume Mob Timer"
-            },
-            {
                 "command": "extension.resetMobTimer",
                 "title": "Reset Mob Timer"
             }
@@ -63,6 +59,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Show rotations and time elapsed in status bar."
+                },
+                "mob-timer.rotationCountTotal": {
+                    "type": "number",
+                    "default": 0,
+                    "description": "Number of rotations since last update."
                 }
             }
         }

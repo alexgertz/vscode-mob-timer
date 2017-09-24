@@ -17,11 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let stopMobTimer = vscode.commands.registerCommand('extension.stopMobTimer', () => {
-        mobTimer.stop();
-    });
-
-    let resumeMobTimer = vscode.commands.registerCommand('extension.resumeMobTimer', () => {
-        mobTimer.resume();
+        mobTimer.pause(true);
     });
 
     let resetMobTimer = vscode.commands.registerCommand('extension.resetMobTimer', () => {
@@ -30,20 +26,21 @@ export function activate(context: vscode.ExtensionContext) {
     
     context.subscriptions.push(startMobTimer);
     context.subscriptions.push(stopMobTimer);
-    context.subscriptions.push(resumeMobTimer);
     context.subscriptions.push(resetMobTimer);
 }
 export function deactivate() {}
 
 
-class MobTimer {
+export class MobTimer {
 
     minutesPerRotation: number;
     enableStatusBarText: boolean;
 
     rotations: number = 0;
+    interval: any = false;
     paused: boolean = true;
     secondsElapsed: number = 0;
+    showStartMsg: boolean = true;
 
     private _statusBarItem: vscode.StatusBarItem;
 
@@ -63,11 +60,11 @@ class MobTimer {
                 this.showStatusBar();
             }
 
-            vscode.window.showInformationMessage(`Starting with rotations every ${this.minutesPerRotation} minutes, good luck!`);
-            
-            // Update timer
-            this.unpause();
-            setInterval(this.update, 1000, this);
+            if (this.showStartMsg) {
+                vscode.window.showInformationMessage(`Starting with rotations every ${this.minutesPerRotation} minutes, good luck!`);
+                this.showStartMsg = false;
+            }
+            this.pause(false);
         }
     }
 
@@ -78,40 +75,31 @@ class MobTimer {
         this._statusBarItem.show();
     }
 
-    private addRotation() {
-        this.rotations += 1;
-    }
-
-    private pause() {
-        this.paused = true;
-    }
-
-    private unpause() {
-        this.paused = false;
-    }
-
-    public stop() {
-        this.pause();
-    }
-
-    public resume() {
-        this.unpause();
+    public pause (paused: boolean) {
+        this.paused = paused;
+        if (paused) {
+            clearInterval(this.interval);
+        } else {
+            this.interval = setInterval(this.update, 1000, this);
+        }
+        
     }
 
     private rotate() {
-        this.addRotation();
-        this.pause();
+        this.rotations += 1;
+
+        let configuration = vscode.workspace.getConfiguration('mob-timer');
+        let rotationCountTotal = configuration.rotationCountTotal;
+        configuration.update('rotationCountTotal', rotationCountTotal + 1);
+
+        this.reset();
+        this.pause(true);
         this.rotateModal();   
     }
 
     public reset() {
         this.secondsElapsed = 0;
         this.updateStatusBar();
-    }
-
-    private restart() {  
-        this.reset();
-        this.paused = false;
     }
 
     private timeFormat(seconds) {
@@ -129,19 +117,16 @@ class MobTimer {
     }
 
     private updateStatusBar() {
-        let timeElapsed = this.timeFormat(this.secondsElapsed);
-        this._statusBarItem.text = `Rotations: ${this.rotations}, Time elapsed: ${timeElapsed}`;
+        if (this.enableStatusBarText) {
+            let timeElapsed = this.timeFormat(this.secondsElapsed);
+            this._statusBarItem.text = `Rotations: ${this.rotations}, Time elapsed: ${timeElapsed}`;
+        }
     }
 
     private update(_this: MobTimer) {
+        if (_this.paused) return;
 
-        if (_this.paused) {
-            return;
-        }
-
-        if (_this.enableStatusBarText) {
-            _this.updateStatusBar();
-        }
+        _this.updateStatusBar();
 
         if (_this.secondsElapsed == _this.minutesPerRotation * 60) {
             _this.rotate();
@@ -150,15 +135,9 @@ class MobTimer {
         }
     }
 
+    // Just pause or not on action
     private handleAction(action) {
-        // Doing this with callback somewhere in the future
-        if (action === 'Restart timer') {
-            this.restart();
-        } else {
-            // This is where native cancel will go
-            this.stop();
-        }
-        
+        this.pause(action !== 'Restart timer');
     }
 
     private rotateModal() {

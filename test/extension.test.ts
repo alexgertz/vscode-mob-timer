@@ -1,12 +1,24 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
-import * as mobTimer from '../src/extension';
+import {MobTimer} from '../src/extension';
 
 suite("Extension Tests", () => {
 
-    // Defines a Mocha unit test
-    test("Something 1", () => {
-        assert.equal(-1, [1, 2, 3].indexOf(5));
-        assert.equal(-1, [1, 2, 3].indexOf(0));
+    var minutesPerRotation = 1,
+        enableStatusBarText = true;
+    let mobTimer = new MobTimer(minutesPerRotation, enableStatusBarText);
+
+    test("Starting timer sets timer to not paused", () => {
+        mobTimer.start();
+        assert.equal(false, mobTimer.paused);
     });
+
+    test("Starting timer will set show start msg to not show again", () => {
+        var mobTimer = new MobTimer(minutesPerRotation, enableStatusBarText);
+
+        assert.equal(true, mobTimer.showStartMsg);
+        mobTimer.start();
+        assert.equal(false, mobTimer.showStartMsg);
+    });
+
 });

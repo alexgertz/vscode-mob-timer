@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to the "mob-timer" extension will be documented in this file.
 
+### 1.5.0
+
+- Bugfix: Fix a bug introduced in 1.4.0 which could make the timer go double speed.
+- Feature: Removed the command `Resume Mob Timer` as it was superfluous(use `Start Mob Timer` instead).
+- Feature: The timer now keeps track of your total number of rotations. You can see it in your configuration (`mob-timer.rotationCountTotal`);
+
+
 ### 1.4.0
 
 - Feature: Run command `Stop Mob Timer` to stop the timer.
